@@ -1,0 +1,17 @@
+# Build output
+cmake-build-debug/
+build/
+cmake-build-*/
+*.o
+*.d
+a.out
+
+# Binaries
+interpreter
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
