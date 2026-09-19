@@ -29,11 +29,14 @@ private:
     bool getCharacter(char &character);
     std::string readIdentifier(char firstCharacter);
     int readInteger(char firstDigit);
+    Relational readRelationalOperator(char firstCharacter);
 
     static bool isDigit(char character);
     static bool isIdentifierStart(char character);
     static bool isIdentifierPart(char character);
     static bool isDiscardedWhitespace(char character);
+    static bool isRelationalStart(char character);
+    
 };
 
 #endif // ALEXICALANALYZER_TOKENIZER_HPP

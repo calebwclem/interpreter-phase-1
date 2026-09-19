@@ -12,6 +12,16 @@ enum class Keyword {
     printKeyword
 };
 
+enum class Relational{
+    none,
+    equalTo,
+    notEqualTo,
+    lessThan,
+    lessThanOrEqual,
+    greaterThan,
+    greaterThanOrEqual,
+};
+
 class Token {
 public:
     [[nodiscard]] bool isEof() const { return _eof; }
@@ -49,6 +59,21 @@ public:
     [[nodiscard]] bool isPrintKeyword() const { return _keyword == Keyword::printKeyword; }
     [[nodiscard]] Keyword keyword() const { return _keyword; }
 
+    //Relational setter/getter/predicates just like Keyword
+    void setRelational(Relational relational) { _relational = relational; }
+    [[nodiscard]] bool isRelationalOperator() const { return _relational != Relational::none; }
+    [[nodiscard]] bool isEqualityOperator() const { return _relational == Relational::equalTo || _relational == Relational::notEqualTo; }
+    [[nodiscard]] bool isOrderingOperator() const { return _relational == Relational::lessThan ||
+                    _relational == Relational::lessThanOrEqual || _relational == Relational::greaterThan ||
+                     _relational == Relational::greaterThanOrEqual; }
+    [[nodiscard]] bool isEqualTo() const { return _relational == Relational::equalTo; }
+    [[nodiscard]] bool isNotEqualTo() const { return _relational == Relational::notEqualTo; }
+    [[nodiscard]] bool isLessThan() const { return _relational == Relational::lessThan; }
+    [[nodiscard]] bool isLessThanOrEqual() const { return _relational == Relational::lessThanOrEqual; }
+    [[nodiscard]] bool isGreaterThan() const { return _relational == Relational::greaterThan; }
+    [[nodiscard]] bool isGreaterThanOrEqual() const { return _relational == Relational::greaterThanOrEqual; }
+    [[nodiscard]] Relational relational() const { return _relational; }
+
     void setIntegerValue(int value) {
         _integerValue = value;
         _isInteger = true;
@@ -61,6 +86,7 @@ public:
 private:
     std::string _identifier{};
     Keyword _keyword{Keyword::none};
+    Relational _relational{Relational::none};
     bool _eof{false};
     bool _newline{false};
     bool _isInteger{false};

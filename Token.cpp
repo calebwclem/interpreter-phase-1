@@ -29,6 +29,18 @@ void Token::print(std::ostream &output) const {
         output << " % ";
     else if (isDivisionOperator())
         output << " / ";
+    else if (isEqualTo())
+        output << " == ";
+    else if (isNotEqualTo())
+        output << " != ";
+    else if (isLessThan())
+        output << " < ";
+    else if (isLessThanOrEqual())
+        output << " <= ";
+    else if (isGreaterThan())
+        output << " > ";
+    else if (isGreaterThanOrEqual())
+        output << " >= ";
     else if (isIdentifier())
         output << identifier();
     else if (isInteger())
