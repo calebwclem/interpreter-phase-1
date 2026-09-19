@@ -6,6 +6,40 @@
 
 #include "Tokenizer.hpp"
 
+
+bool Tokenizer::isRelationalStart(char character){
+    return character == '=' || character == '<' || character == '>' || character == '!';
+}
+
+Relational Tokenizer::readRelationalOperator(char firstCharacter){
+    //Establish if the next character is =
+    const bool followedByEquals = inputStream.peek() == '=';
+    if(followedByEquals){
+        char equalsSign;
+        getCharacter(equalsSign);
+    }
+
+    if(firstCharacter == '<')
+        return followedByEquals ? Relational::lessThanOrEqual : Relational::lessThan;
+    
+    if(firstCharacter == '>')
+        return followedByEquals ? Relational::greaterThanOrEqual : Relational::greaterThan;
+
+    if(firstCharacter == '=')
+        return followedByEquals ? Relational::equalTo : Relational::none;
+
+    // If we reach this line
+    // firstCharacter is '!' -> can only be '!='
+    if(!followedByEquals){
+        std::cerr << "Unknown character in input at line " << lineNumber
+                  << ", column " << columnNumber - 1 << ": '"
+                  << firstCharacter << "'.\n";
+        std::exit(EXIT_FAILURE);
+    }
+    // Must be !=
+    return Relational::notEqualTo;
+}
+
 bool Tokenizer::isDigit(char character) {
     return std::isdigit(static_cast<unsigned char>(character)) != 0;
 }
@@ -119,7 +153,15 @@ Token Tokenizer::getToken() {
 
         if (isDigit(character)) {
             token.setIntegerValue(readInteger(character));
-        } else if (character == '=' || character == '+' || character == '-' ||
+        }
+        else if(isRelationalStart(character)){
+            const Relational relationalOp = readRelationalOperator(character);
+            if(relationalOp == Relational::none)
+                token.setSymbol('='); //Assignment operator belongs with relational operator
+            else                       // to peek at next character
+                token.setRelational(relationalOp);
+        }
+        else if (character == '+' || character == '-' ||
                    character == '*' || character == '/' || character == '%' ||
                    character == ';' || character == '(' || character == ')') {
             token.setSymbol(character);
